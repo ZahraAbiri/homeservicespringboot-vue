@@ -47,15 +47,15 @@ public class SubServiceService {
         return subServices;
     }
 
-    public SubService addExpertToSubService(Expert expert, SubService subService) {
-        subService.getExperts().add(expert);
-        return update(subService);
-    }
-
-    public SubService removeExpertFromSubService(Expert expert, SubService subService) {
-        subService.getExperts().remove(expert);
-        return update(subService);
-    }
+//    public SubService addExpertToSubService(Expert expert, SubService subService) {
+//        subService.getExperts().add(expert);
+//        return update(subService);
+//    }
+//
+//    public SubService removeExpertFromSubService(Expert expert, SubService subService) {
+//        subService.getExperts().remove(expert);
+//        return update(subService);
+//    }
 
 
 

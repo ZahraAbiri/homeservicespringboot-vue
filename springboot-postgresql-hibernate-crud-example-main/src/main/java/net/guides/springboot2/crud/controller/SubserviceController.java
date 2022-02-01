@@ -20,7 +20,7 @@ public class SubserviceController {
 	@Autowired
 	private SubserviceDao subserviceDao;
 
-	@GetMapping("/subs")
+	@GetMapping("/getsubs")
 	public List<SubService> getAllEmployees() {
 		return subserviceDao.findAll();
 	}

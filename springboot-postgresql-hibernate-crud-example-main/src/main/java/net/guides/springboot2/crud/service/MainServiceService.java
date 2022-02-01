@@ -28,6 +28,7 @@ public class MainServiceService {
        return mainServiceDao.findByName(name);
     }
     public List<MainService> findAll() {
+
        return mainServiceDao.findAll();
     }
 

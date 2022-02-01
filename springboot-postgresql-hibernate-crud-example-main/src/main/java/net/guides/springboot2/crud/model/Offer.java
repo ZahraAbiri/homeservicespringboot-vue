@@ -4,6 +4,7 @@ package net.guides.springboot2.crud.model;
 import lombok.*;
 import net.guides.springboot2.crud.model.enums.OfferStatus;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -18,7 +19,7 @@ public class Offer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @ManyToOne
-//    @Column(nullable = false)
+
     private Expert expert;
     @CreationTimestamp
     private Date registrationDate;
@@ -30,6 +31,15 @@ public class Offer {
     private OfferStatus offerStatus;
     @ManyToOne
     private Order order;
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public Integer getId() {
         return id;

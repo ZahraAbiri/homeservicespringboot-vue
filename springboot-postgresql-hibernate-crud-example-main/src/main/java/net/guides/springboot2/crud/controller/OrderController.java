@@ -1,9 +1,15 @@
 package net.guides.springboot2.crud.controller;//package net.guides.springboot2.crud.controller;
 //
 
+import net.guides.springboot2.crud.dto.OrderDto;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
+import net.guides.springboot2.crud.model.Address;
+import net.guides.springboot2.crud.model.Customer;
 import net.guides.springboot2.crud.model.Order;
+import net.guides.springboot2.crud.model.SubService;
+import net.guides.springboot2.crud.repository.CustomerDao;
 import net.guides.springboot2.crud.repository.OrderDao;
+import net.guides.springboot2.crud.repository.SubserviceDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +18,8 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
 @CrossOrigin(origins = "http://localhost:8081")
 
 @RestController
@@ -19,8 +27,12 @@ import java.util.Map;
 public class OrderController {
 	@Autowired
 	private OrderDao orderDao;
+	@Autowired
+	private CustomerDao customerDao;
+	@Autowired
+	private SubserviceDao subserviceDao;
 
-	@GetMapping("/orders")
+	@GetMapping("/ordersfind")
 	public List<Order> getAllEmployees() {
 		return orderDao.findAll();
 	}
@@ -36,6 +48,27 @@ public class OrderController {
 
 	@PostMapping("/order")
 	public Order createEmployee(@Valid @RequestBody Order order) {
+
+		return orderDao.save(order);
+	}
+	@PostMapping("/orders")
+	public Order createEmployee(@Valid @RequestBody OrderDto orderDto) {
+		Optional<Customer> customer=customerDao.findByEmailAddress(orderDto.getCustomerEmailAddrress());
+		Customer customer1=new Customer();
+		if(customer.isPresent()){
+			customer1=customer.get();
+		}
+		SubService subService=new SubService();
+		Optional<SubService> sub=subserviceDao.findById(orderDto.getSubServiceId());
+		if(sub.isPresent()){
+			subService=sub.get();
+		}
+		Order order=new Order();
+		order.setCustomer(customer1);
+		order.setSubService(subService);
+		Address address=new Address();
+		address.setStreetAddress(orderDto.getStreetAddress());
+
 		return orderDao.save(order);
 	}
 

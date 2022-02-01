@@ -21,7 +21,7 @@ public class Comment {
     @ManyToOne
     private Customer customer;
     @ManyToOne
-//    (nullabale=flase)
+
     private Expert expert;
     @OneToOne
     private Order order;

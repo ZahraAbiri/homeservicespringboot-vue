@@ -3,10 +3,18 @@ package net.guides.springboot2.crud.controller;//package net.guides.springboot2.
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
+import net.guides.springboot2.crud.dto.CommentDto;
 import net.guides.springboot2.crud.model.Comment;
+import net.guides.springboot2.crud.model.Customer;
+import net.guides.springboot2.crud.model.Expert;
+import net.guides.springboot2.crud.model.Order;
 import net.guides.springboot2.crud.repository.CommentDao;
+import net.guides.springboot2.crud.repository.CustomerDao;
+import net.guides.springboot2.crud.repository.ExpertDao;
+import net.guides.springboot2.crud.repository.OrderDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,20 +28,17 @@ import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 public class CommentController {
 	@Autowired
 	private CommentDao commentDao;
-
+	@Autowired
+	private OrderDao orderDao;
+	@Autowired
+	private ExpertDao expertDao;
+	@Autowired
+	private CustomerDao customerDao;
 	@GetMapping("/comment")
 	public List<Comment> getAllComments() {
 		return commentDao.findAll();
 	}
-//	@PostMapping("/employees")
-//	public List<Employee> getAllEmployees1() {
-//		return employeeRepository.findAll();
-//	}
-//
-//	@PostMapping("/test")
-//	public String test() {
-//		return "test";
-//	}
+
 
 	@GetMapping("/comment/{id}")
 	public ResponseEntity<Comment> getCommentById(@PathVariable(value = "id") Integer commentId)
@@ -44,7 +49,26 @@ public class CommentController {
 	}
 
 	@PostMapping("/comm")
-	public Comment createComment(@RequestBody Comment comment) {
+	public Comment createComment(@RequestBody CommentDto commentDto) {
+		Order order=new Order();
+		Customer customer=new Customer();
+		Expert expert=new Expert();
+		Optional<Order> ord = orderDao.findById(commentDto.getOrderid());
+		if (ord.isPresent()) {
+			order = ord.get();
+		}Optional<Expert> exp = expertDao.findById(commentDto.getExpertid());
+		if (exp.isPresent()) {
+			expert = exp.get();
+		}Optional<Customer> cus = customerDao.findById(commentDto.getExpertid());
+		if (cus.isPresent()) {
+			customer = cus.get();
+		}
+		Comment comment=new Comment();
+		comment.setCustomer(customer);
+		comment.setExpert(expert);
+		comment.setOrder(order);
+		comment.setDesciption(commentDto.getDesciption());
+		comment.setScore(commentDto.getScore());
 		return commentDao.save(comment);
 	}
 

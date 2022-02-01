@@ -10,17 +10,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class MainService {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(unique = true)
     private String name;
-    @OneToMany(mappedBy = "mainService")
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Set<SubService> subServices=new HashSet<>();
 
     public Integer getId() {

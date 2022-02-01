@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 
+import net.guides.springboot2.crud.dto.Customerdto;
 import net.guides.springboot2.crud.model.Customer;
 import net.guides.springboot2.crud.repository.CustomerDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/cus")
 public class CustomerController {
@@ -28,15 +29,6 @@ public class CustomerController {
 	public List<Customer> getAllCustomer() {
 		return customerDao.findAll();
 	}
-//	@PostMapping("/employees")
-//	public List<Employee> getAllEmployees1() {
-//		return employeeRepository.findAll();
-//	}
-//
-//	@PostMapping("/test")
-//	public String test() {
-//		return "test";
-//	}
 
 	@GetMapping("/customer/{id}")
 	public ResponseEntity<Customer> getEmployeeById(@PathVariable(value = "id") Integer customerId)
@@ -46,9 +38,20 @@ public class CustomerController {
 		return ResponseEntity.ok().body(customer);
 	}
 
-	@GetMapping("/cu")
-	public Customer createCustomr(@RequestBody Customer customer)
+	@PostMapping("/cu")
+	public Customer createCustomr(@RequestBody Customerdto customerdto)
+
 	{
+		Customer customer=new Customer();
+		customer.setFirstname(customerdto.getFirstname());
+		customer.setLastname(customerdto.getLastname());
+		customer.setPersonStatuse(customerdto.getPersonStatuse());
+		customer.setCredit(customerdto.getCredit());
+		customer.setEmailAddress(customerdto.getEmailAddress());
+		customer.setPassword(customerdto.getPassword());
+		customer.setRegistrationDate(customerdto.getRegistrationDate());
+
+
 		return customerDao.save(customer);
 	}
 

@@ -10,10 +10,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class SubService {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +20,8 @@ public class SubService {
     private String description;
     @ManyToOne
     private MainService mainService;
-    @ManyToMany
-    private Set<Expert> experts = new HashSet<Expert>();
+//    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+//    private Set<Expert> experts = new HashSet<Expert>();
 
     public Integer getId() {
         return id;
@@ -67,13 +63,13 @@ public class SubService {
         this.mainService = mainService;
     }
 
-    public Set<Expert> getExperts() {
-        return experts;
-    }
-
-    public void setExperts(Set<Expert> experts) {
-        this.experts = experts;
-    }
+//    public Set<Expert> getExperts() {
+//        return experts;
+//    }
+//
+//    public void setExperts(Set<Expert> experts) {
+//        this.experts = experts;
+//    }
 
     @Override
     public String toString() {
@@ -82,7 +78,7 @@ public class SubService {
                 ", name='" + name + '\'' +
                 ", basePrice=" + basePrice +
                 ", description='" + description + '\'' +
-                ", mainService=" + mainService +
+//                ", mainService=" + mainService +
                 '}';
     }
 }

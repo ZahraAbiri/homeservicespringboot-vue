@@ -1,19 +1,21 @@
 package net.guides.springboot2.crud.controller;//package net.guides.springboot2.crud.controller;
 //
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import javax.validation.Valid;
-
+import net.guides.springboot2.crud.dto.Expertdto;
+import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Expert;
+import net.guides.springboot2.crud.model.MainService;
+import net.guides.springboot2.crud.model.SubService;
 import net.guides.springboot2.crud.repository.ExpertDao;
-import net.guides.springboot2.crud.service.ExpertService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import net.guides.springboot2.crud.exception.ResourceNotFoundException;
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:8081")
 
@@ -27,15 +29,6 @@ public class ExpertController {
 	public List<Expert> getAllEmployees() {
 		return expertDao.findAll();
 	}
-//	@PostMapping("/employees")
-//	public List<Employee> getAllEmployees1() {
-//		return employeeRepository.findAll();
-//	}
-//
-//	@PostMapping("/test")
-//	public String test() {
-//		return "test";
-//	}
 
 	@GetMapping("/expert/{id}")
 	public ResponseEntity<Expert> getExpertById(@PathVariable(value = "id") Integer expertId)
@@ -46,7 +39,11 @@ public class ExpertController {
 	}
 
 	@PostMapping("/experts")
-	public Expert createExpert(@Valid @RequestBody Expert expert) {
+	public Expert createExpert(@Valid @RequestBody Expertdto expertdto)
+	{
+		Expert expert=new Expert();
+		expert.setFirstname(expertdto.getFirstname());
+		expert.setPhoto(expertdto.getPhoto());
 		return expertDao.save(expert);
 	}
 
@@ -66,6 +63,19 @@ public class ExpertController {
 		final Expert updatedEmployee = expertDao.save(expert);
 		return ResponseEntity.ok(updatedEmployee);
 	}
+
+
+	@PutMapping("/expaddsub/{id}")
+	public ResponseEntity<Expert> updateExpertSubservice(@PathVariable(value = "id") Integer expertId,
+	@Valid @RequestBody Expert expert) throws ResourceNotFoundException {
+		Expert experts = expertDao.findById(expertId)
+				.orElseThrow(() -> new ResourceNotFoundException(" not found for this id :: " + expertId));
+		experts.setServices(expert.getServices());
+
+		final Expert updatedexpert1 = expertDao.save(experts);
+		return ResponseEntity.ok(updatedexpert1);
+	}
+
 
 	@DeleteMapping("/exper/{id}")
 	public Map<String, Boolean> deleteExpert(@PathVariable(value = "id") Integer expertId)

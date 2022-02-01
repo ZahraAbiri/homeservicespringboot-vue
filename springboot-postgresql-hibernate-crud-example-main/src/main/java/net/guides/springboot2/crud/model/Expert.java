@@ -6,9 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Data
@@ -20,8 +18,8 @@ public class Expert extends Person {
     @Column(columnDefinition = "BLOB" ,length = 300)
     private byte[] photo;
     private Double score;
-    @ManyToMany(mappedBy = "experts",fetch = FetchType.LAZY)
-    private Set<SubService> services = new HashSet<>();
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<SubService> services = new ArrayList<>();
 
     public byte[] getPhoto() {
         return photo;
@@ -39,11 +37,11 @@ public class Expert extends Person {
         this.score = score;
     }
 
-    public Set<SubService> getServices() {
+    public List<SubService> getServices() {
         return services;
     }
 
-    public void setServices(Set<SubService> services) {
+    public void setServices(List<SubService> services) {
         this.services = services;
     }
 

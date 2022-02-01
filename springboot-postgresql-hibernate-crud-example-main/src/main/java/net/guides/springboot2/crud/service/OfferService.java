@@ -29,7 +29,7 @@ public class OfferService {
     }
 
     public Order addOfferToOrder(Offer offer) {
-        Set<SubService> expertServices = offer.getExpert().getServices();
+        List<SubService> expertServices = offer.getExpert().getServices();
         SubService subService = offer.getOrder().getSubService();
         if (expertServices.contains(subService) && subService.getBasePrice() <= offer.getProposedPrice()) {
             Offer savedOffer = save(offer);

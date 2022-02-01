@@ -1,49 +1,48 @@
-package net.guides.springboot2.crud.model;
+package net.guides.springboot2.crud.dto;
 
-import lombok.*;
+import net.guides.springboot2.crud.model.SubService;
 import net.guides.springboot2.crud.model.enums.PersonStatuse;
 import net.guides.springboot2.crud.model.enums.Role;
-import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
-
-@MappedSuperclass
-@Getter
-@Setter
-
-public class Person {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class Expertdto {
     private String firstname;
     private String lastname;
-    @Column(unique = true)
     private String emailAddress;
     private String password;
-    @Enumerated(EnumType.STRING)
     private PersonStatuse personStatuse;
-    @CreationTimestamp
     private Date registrationDate;
     private Long credit;
-    @Enumerated(EnumType.STRING)
     private Role role;
+    private byte[] photo;
+    private Double score;
+    private Set<SubService> services = new HashSet<>();
 
-    public Role getRole() {
-        return role;
+    public byte[] getPhoto() {
+        return photo;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
     }
 
-    public int getId() {
-        return id;
+    public Double getScore() {
+        return score;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setScore(Double score) {
+        this.score = score;
+    }
+
+    public Set<SubService> getServices() {
+        return services;
+    }
+
+    public void setServices(Set<SubService> services) {
+        this.services = services;
     }
 
     public String getFirstname() {
@@ -100,5 +99,13 @@ public class Person {
 
     public void setCredit(Long credit) {
         this.credit = credit;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

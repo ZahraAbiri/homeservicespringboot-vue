@@ -9,6 +9,7 @@ import net.guides.springboot2.crud.model.enums.OrderStatus;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
@@ -19,6 +20,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name="orders_Tbl")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,13 +36,14 @@ public class Order {
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateOfWorkPerformed;
     @OneToOne
+    @Transient
     private Address address;
     @ManyToOne
     @JoinColumn(nullable = false)
     private Customer customer;
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
-    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "order", fetch = FetchType.EAGER)
     private Set<Offer> offers = new HashSet<>();
     @ManyToOne
     private Expert expert;
