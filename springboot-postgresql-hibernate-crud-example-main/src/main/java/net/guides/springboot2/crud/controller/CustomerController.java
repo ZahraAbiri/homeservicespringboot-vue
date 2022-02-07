@@ -3,16 +3,24 @@ package net.guides.springboot2.crud.controller;//package net.guides.springboot2.
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 import net.guides.springboot2.crud.dto.Customerdto;
+import net.guides.springboot2.crud.dto.OrderDto;
+import net.guides.springboot2.crud.dto.PaymentDto;
 import net.guides.springboot2.crud.model.Customer;
 import net.guides.springboot2.crud.repository.CustomerDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -31,7 +39,7 @@ public class CustomerController {
 	}
 
 	@GetMapping("/customer/{id}")
-	public ResponseEntity<Customer> getEmployeeById(@PathVariable(value = "id") Integer customerId)
+	public ResponseEntity<Customer> getCustomerById(@PathVariable(value = "id") Integer customerId)
 			throws ResourceNotFoundException {
 		Customer customer = customerDao.findById(customerId)
 				.orElseThrow(() -> new ResourceNotFoundException("Customer not found for this id :: " + customerId));
@@ -62,8 +70,8 @@ public class CustomerController {
 	}
 
 	@PutMapping("/custom/{id}")
-	public ResponseEntity<Customer> updateEmployee(@PathVariable(value = "id") Integer customerId,
-			@RequestBody Customer custommerDetails) throws ResourceNotFoundException {
+	public ResponseEntity<Customer> updateCustomer(@PathVariable(value = "id") Integer customerId,
+												   @RequestBody Customer custommerDetails) throws ResourceNotFoundException {
 		Customer customer = customerDao.findById(customerId)
 				.orElseThrow(() -> new ResourceNotFoundException("Customer not found for this id :: " + customerId));
 
@@ -89,4 +97,5 @@ public class CustomerController {
 		response.put("deleted", Boolean.TRUE);
 		return response;
 	}
+
 }

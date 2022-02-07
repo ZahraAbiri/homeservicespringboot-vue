@@ -72,24 +72,22 @@ public class CommentController {
 		return commentDao.save(comment);
 	}
 
-	@PutMapping("/employees/{id}")
+	@PutMapping("/commentss/{id}")
 	public ResponseEntity<Comment> updateComment(@PathVariable(value = "id") Integer commentId,
 			@RequestBody Comment commentDetails) throws ResourceNotFoundException {
 		Comment comment = commentDao.findById(commentId)
 				.orElseThrow(() -> new ResourceNotFoundException("comment not found for this id :: " + commentId));
 
 		comment.setDesciption(commentDetails.getDesciption());
-//		employee.setLastName(commentDetails.getLastName());
-//		employee.setFirstName(commentDetails.getFirstName());
-		final Comment updatedEmployee = commentDao.save(comment);
-		return ResponseEntity.ok(updatedEmployee);
+		final Comment updatedcomment1 = commentDao.save(comment);
+		return ResponseEntity.ok(updatedcomment1);
 	}
 
 	@DeleteMapping("/comment/{id}")
 	public Map<String, Boolean> deleteComment(@PathVariable(value = "id") Integer commentId)
 			throws ResourceNotFoundException {
 		Comment comment = commentDao.findById(commentId)
-				.orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + commentId));
+				.orElseThrow(() -> new ResourceNotFoundException("comment not found for this id :: " + commentId));
 
 		commentDao.delete(comment);
 		Map<String, Boolean> response = new HashMap<>();

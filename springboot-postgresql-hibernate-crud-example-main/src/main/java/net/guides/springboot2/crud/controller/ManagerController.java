@@ -48,11 +48,11 @@ public class ManagerController {
 
 		manager.setFirstname(managerDetails.getFirstname());
 
-		final Manager updatedEmployee = managerDao.save(manager);
-		return ResponseEntity.ok(updatedEmployee);
+		final Manager updatedExpert = managerDao.save(manager);
+		return ResponseEntity.ok(updatedExpert);
 	}
 
-	@DeleteMapping("/employees/{id}")
+	@DeleteMapping("/Exp/{id}")
 	public Map<String, Boolean> deleteManager(@PathVariable(value = "id") Integer managerId)
 			throws ResourceNotFoundException {
         Manager manager = managerDao.findById(managerId)

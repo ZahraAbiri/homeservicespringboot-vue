@@ -1,53 +1,25 @@
 package net.guides.springboot2.crud.service;
 
+import net.guides.springboot2.crud.dto.Expertdto;
+import net.guides.springboot2.crud.exception.ResourceNotFoundException;
+import net.guides.springboot2.crud.model.SubService;
 
-import lombok.Getter;
-import lombok.Setter;
-import net.guides.springboot2.crud.model.Expert;
-import net.guides.springboot2.crud.repository.ExpertDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 
-import java.io.IOException;
-import java.util.Optional;
+public interface ExpertService {
 
-@Getter
-@Setter
-public class ExpertService {
-    @Autowired
-    private ExpertDao expertDao;
-    public Expert save(Expert expert) throws IOException {
-        expertDao.save(expert);
-        return expert;
-    }
+    public void save(Expertdto expertDto) throws ResourceNotFoundException;
 
-    public Expert findByEmailAddress(String emailAddress) {
-        Optional<Expert> expert = expertDao.findByEmailAddress(emailAddress);
-        if (expert.isPresent()) {
-            Expert foundedExpert = expert.get();
-            return foundedExpert;
-        } else {
-            throw new RuntimeException("emailAddress not exist!");
-        }
-    }
+    public Expertdto findByEmailAddress(String emailAddress) throws ResourceNotFoundException;
 
-    public boolean isExist(String emailAddress) {
-        Optional<Expert> expert = expertDao.findByEmailAddress(emailAddress);
-        if (expert.isPresent()) {
-            throw new RuntimeException("this emailAddress exist!");
-        } else {
-            return false;
-        }
-    }
-    public void updateScore(Expert expert, Double newScore) {
-        Double expertScore = expert.getScore();
-        Double new_Score = (expertScore + newScore);
-        expert.setScore(new_Score);
-//        update(expert);
-    }
+//    public void update(Expertdto expertDto);
+    boolean update(Expertdto expertDto);
 
-//    private void update(Expert expert) {
-//            expertDao.update(expert);
-//        }
+    public List<SubService> findServicesByEmail(Expertdto expertDto);
 
+    public void updateScore(Expertdto expertDto, Double instructionsScore);
 
+    public Expertdto findById(Integer id) throws ResourceNotFoundException;
+
+    Expertdto findByEmailAddressAndPassword(String email, String password) throws ResourceNotFoundException;
 }

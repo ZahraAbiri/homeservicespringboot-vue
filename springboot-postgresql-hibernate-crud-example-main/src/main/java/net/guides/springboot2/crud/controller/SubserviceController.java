@@ -21,13 +21,13 @@ public class SubserviceController {
 	private SubserviceDao subserviceDao;
 
 	@GetMapping("/getsubs")
-	public List<SubService> getAllEmployees() {
+	public List<SubService> getAllsubservices() {
 		return subserviceDao.findAll();
 	}
 
 
 	@GetMapping("/sub/{id}")
-	public ResponseEntity<SubService> getEmployeeById(@PathVariable(value = "id") Integer subserviceId)
+	public ResponseEntity<SubService> getsubserviceById(@PathVariable(value = "id") Integer subserviceId)
 			throws ResourceNotFoundException {
         SubService subService = subserviceDao.findById(subserviceId)
 				.orElseThrow(() -> new ResourceNotFoundException("SubService not found for this id :: " + subserviceId));
@@ -35,27 +35,27 @@ public class SubserviceController {
 	}
 
 	@PostMapping("/subs")
-	public SubService createEmployee(@Valid @RequestBody SubService subService) {
+	public SubService createsubservice(@Valid @RequestBody SubService subService) {
 		return subserviceDao.save(subService);
 	}
 
 	@PutMapping("/subb/{id}")
-	public ResponseEntity<SubService> updateEmployee(@PathVariable(value = "id") Integer subserviceId,
+	public ResponseEntity<SubService> updatesubservice(@PathVariable(value = "id") Integer subserviceId,
 			@Valid @RequestBody SubService suvserviceDetails) throws ResourceNotFoundException {
         SubService subService = subserviceDao.findById(subserviceId)
-				.orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + subserviceId));
+				.orElseThrow(() -> new ResourceNotFoundException("subservice not found for this id :: " + subserviceId));
 
 		subService.setBasePrice(suvserviceDetails.getBasePrice());
 
-		final SubService updatedEmployee = subserviceDao.save(subService);
-		return ResponseEntity.ok(updatedEmployee);
+		final SubService updatedsubservice = subserviceDao.save(subService);
+		return ResponseEntity.ok(updatedsubservice);
 	}
 
 	@DeleteMapping("/su/{id}")
-	public Map<String, Boolean> deleteEmployee(@PathVariable(value = "id") Integer subserviceId)
+	public Map<String, Boolean> deletesubservice(@PathVariable(value = "id") Integer subserviceId)
 			throws ResourceNotFoundException {
         SubService subService = subserviceDao.findById(subserviceId)
-				.orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + subserviceId));
+				.orElseThrow(() -> new ResourceNotFoundException("subservice not found for this id :: " + subserviceId));
 
 		subserviceDao.delete(subService);
 		Map<String, Boolean> response = new HashMap<>();

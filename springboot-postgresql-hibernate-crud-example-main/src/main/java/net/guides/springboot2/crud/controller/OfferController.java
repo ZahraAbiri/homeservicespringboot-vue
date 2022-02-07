@@ -40,7 +40,7 @@ public class OfferController {
 
 
     @GetMapping("/off/{id}")
-    public ResponseEntity<Offer> getEmployeeById(@PathVariable(value = "id") Integer offerId)
+    public ResponseEntity<Offer> getofferById(@PathVariable(value = "id") Integer offerId)
             throws ResourceNotFoundException {
         Offer offer = offerDao.findById(offerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Offer not found for this id :: " + offerId));
@@ -55,7 +55,7 @@ public class OfferController {
 
 
     @PostMapping("/offers")
-    public Offer createEmployee(@Valid @RequestBody OfferDto offerDto) {
+    public Offer createOffer(@Valid @RequestBody OfferDto offerDto) {
         Optional<Expert> expert = expertDao.findByEmailAddress(offerDto.getExpertEmailAddress());
         Expert expert1 = new Expert();
         if (expert.isPresent()) {
@@ -85,15 +85,15 @@ public class OfferController {
         offer.setExpert(offerDeyails.getExpert());
         offer.setProposedPrice(offerDeyails.getProposedPrice());
         offer.setDurationOfWork(offerDeyails.getDurationOfWork());
-        final Offer updatedEmployee = offerDao.save(offer);
-        return ResponseEntity.ok(updatedEmployee);
+        final Offer updatedOffers = offerDao.save(offer);
+        return ResponseEntity.ok(updatedOffers);
     }
 
     @DeleteMapping("/of/{id}")
-    public Map<String, Boolean> deleteEmployee(@PathVariable(value = "id") Integer offerId)
+    public Map<String, Boolean> deleteOffers(@PathVariable(value = "id") Integer offerId)
             throws ResourceNotFoundException {
         Offer offer = offerDao.findById(offerId)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + offerId));
+                .orElseThrow(() -> new ResourceNotFoundException("offer not found for this id :: " + offerId));
 
         offerDao.delete(offer);
         Map<String, Boolean> response = new HashMap<>();

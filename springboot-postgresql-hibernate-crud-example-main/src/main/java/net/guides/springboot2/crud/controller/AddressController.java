@@ -22,11 +22,7 @@ public class AddressController {
 	public List<Address> getAllEmployees() {
 		return addressDao.findAll();
 	}
-//	@PostMapping("/employees")
-//	public List<Employee> getAllEmployees1() {
-//		return employeeRepository.findAll();
-//	}
-//
+
 	@PostMapping("/test")
 	public String test() {
 		return "test";

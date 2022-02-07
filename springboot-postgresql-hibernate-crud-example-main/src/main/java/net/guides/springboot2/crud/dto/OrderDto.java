@@ -1,15 +1,18 @@
 package net.guides.springboot2.crud.dto;
 
+import net.guides.springboot2.crud.model.Customer;
+import net.guides.springboot2.crud.model.Expert;
+import net.guides.springboot2.crud.model.Offer;
 import net.guides.springboot2.crud.model.enums.OrderStatus;
 
 import java.util.Date;
+import java.util.Set;
 
 public class OrderDto {
-private String customerEmailAddrress;
-private Integer subServiceId;
+    private String customerEmailAddrress;
+    private Integer subServiceId;
 
-
-
+    private Customer customer;
     private Long proposedPrice;
     private String jobDescription;
     private Date orderRegistrationDate;
@@ -20,10 +23,37 @@ private Integer subServiceId;
     private String houseNumber;
     private Long zipCode;
     private OrderStatus orderStatus;
-//    private Set<Offer> offers = new HashSet<>();
-//    @ManyToOne
-//    private Expert expert;
+    private Offer offers;
 
+    private Expert expert;
+
+    public void setCustomerEmailAddrress(String customerEmailAddrress) {
+        this.customerEmailAddrress = customerEmailAddrress;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Offer getOffers() {
+        return offers;
+    }
+
+    public void setOffers(Offer offers) {
+        this.offers = offers;
+    }
+
+    public Expert getExpert() {
+        return expert;
+    }
+
+    public void setExpert(Expert expert) {
+        this.expert = expert;
+    }
 
     public String getCustomerEmailAddrress() {
         return customerEmailAddrress;

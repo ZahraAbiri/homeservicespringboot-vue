@@ -16,5 +16,7 @@ public interface ExpertDao extends JpaRepository<Expert,Integer> {
     @Query(value = "UPDATE Expert e set e.password =:password where e.id=:id")
     void UpdatePassword(@Param("password") String password, @Param("id") int id);
 
+    Optional<Expert> findByEmailAddressAndPassword(String email, String password);
+
 //    void update(Expert expert);
 }

@@ -33,26 +33,26 @@ public class OrderController {
 	private SubserviceDao subserviceDao;
 
 	@GetMapping("/ordersfind")
-	public List<Order> getAllEmployees() {
+	public List<Order> getAllOrderss() {
 		return orderDao.findAll();
 	}
 
 
 	@GetMapping("/ord/{id}")
-	public ResponseEntity<Order> getEmployeeById(@PathVariable(value = "id") Integer orderId)
+	public ResponseEntity<Order> getorderById(@PathVariable(value = "id") Integer orderId)
 			throws ResourceNotFoundException {
         Order order = orderDao.findById(orderId)
-				.orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + orderId));
+				.orElseThrow(() -> new ResourceNotFoundException("order not found for this id :: " + orderId));
 		return ResponseEntity.ok().body(order);
 	}
 
 	@PostMapping("/order")
-	public Order createEmployee(@Valid @RequestBody Order order) {
+	public Order createorder(@Valid @RequestBody Order order) {
 
 		return orderDao.save(order);
 	}
 	@PostMapping("/orders")
-	public Order createEmployee(@Valid @RequestBody OrderDto orderDto) {
+	public Order createorders(@Valid @RequestBody OrderDto orderDto) {
 		Optional<Customer> customer=customerDao.findByEmailAddress(orderDto.getCustomerEmailAddrress());
 		Customer customer1=new Customer();
 		if(customer.isPresent()){
@@ -73,20 +73,20 @@ public class OrderController {
 	}
 
 	@PutMapping("/order/{id}")
-	public ResponseEntity<Order> updateEmployee(@PathVariable(value = "id") Integer orderId,
-			@Valid @RequestBody Order orderDetails) throws ResourceNotFoundException {
+	public ResponseEntity<Order> updateOrdes(@PathVariable(value = "id") Integer orderId,
+											 @Valid @RequestBody Order orderDetails) throws ResourceNotFoundException {
         Order order = orderDao.findById(orderId)
-				.orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + orderId));
+				.orElseThrow(() -> new ResourceNotFoundException("order not found for this id :: " + orderId));
 
-		final Order updatedEmployee = orderDao.save(order);
-		return ResponseEntity.ok(updatedEmployee);
+		final Order updatedOrder = orderDao.save(order);
+		return ResponseEntity.ok(updatedOrder);
 	}
 
 	@DeleteMapping("/ord/{id}")
-	public Map<String, Boolean> deleteEmployee(@PathVariable(value = "id") Integer orderId)
+	public Map<String, Boolean> deleteorder(@PathVariable(value = "id") Integer orderId)
 			throws ResourceNotFoundException {
         Order order = orderDao.findById(orderId)
-				.orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + orderId));
+				.orElseThrow(() -> new ResourceNotFoundException("order not found for this id :: " + orderId));
 
 		orderDao.delete(order);
 		Map<String, Boolean> response = new HashMap<>();
