@@ -27,22 +27,22 @@ public class PaymentServiceImpl implements PaymentService {
     private ExpertService expertService;
 
 
-    @Override
-    public Customer pay(PaymentDto paymentDto) {
-        assert paymentDto != null;
-        OrderDto doneOrder = paymentDto.getOrder();
-        double price = doneOrder.getProposedPrice();
-        Customer customer = doneOrder.getCustomer();
-        if (paymentDto.getPaymentWay().equals(PaymentWay.CREDIT))
-            customer = customerService.payByCredit(customer, price);
-
-        Expert expertDto = doneOrder.getExpert();
-        double expertFees = price * 0.7;
-        expertDto.setCredit((long) (expertDto.getCredit() + expertFees));
-        doneOrder.setOrderStatus(OrderStatus.PAID);
-        expertService.update(expertDto);
-        orderService.updateStatus(doneOrder);
-        paymentDao.save(PaymentMapper.mapPaymentDtoToPaymentForSaving(paymentDto));
-        return customer;
-    }
+//    @Override
+//    public Customer pay(PaymentDto paymentDto) {
+//        assert paymentDto != null;
+////        OrderDto doneOrder = paymentDto.getOrder();
+//        double price = doneOrder.getProposedPrice();
+//        Customer customer = doneOrder.getCustomer();
+////        if (paymentDto.getPaymentWay().equals(PaymentWay.CREDIT))
+//            customer = customerService.payByCredit(customer, price);
+//
+//        Expert expertDto = doneOrder.getExpert();
+//        double expertFees = price * 0.7;
+//        expertDto.setCredit((long) (expertDto.getCredit() + expertFees));
+//        doneOrder.setOrderStatus(OrderStatus.PAID);
+////        expertService.update(expertDto);
+//        orderService.updateStatus(doneOrder);
+//        paymentDao.save(PaymentMapper.mapPaymentDtoToPaymentForSaving(paymentDto));
+//        return customer;
+//    }
 }

@@ -1,46 +1,51 @@
 package net.guides.springboot2.crud.dto;
 
-import net.guides.springboot2.crud.model.enums.PaymentWay;
-
 import javax.validation.constraints.Size;
-import java.util.Date;
 
 public class PaymentDto {
-    private PaymentWay paymentWay;
+    private  Integer customerId;
+    private Integer orderId;
+    private Integer expertId;
+    private  Long payment;
 
-    private OrderDto order;
 
-    private Date paymantDate;
-
-    @Size(max = 12, min = 8, message = "invalid card number!")
+    @Size(max = 16, min = 16, message = "invalid card number!")
     private String cardNumber;
 
-    public PaymentWay getPaymentWay() {
-        return paymentWay;
+    public Integer getCustomerId() {
+        return customerId;
     }
 
-    public void setPaymentWay(PaymentWay paymentWay) {
-        this.paymentWay = paymentWay;
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
     }
 
-    public OrderDto getOrder() {
-        return order;
+    public Integer getOrderId() {
+        return orderId;
     }
 
-    public void setOrder(OrderDto order) {
-        this.order = order;
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
     }
 
-    public Date getPaymantDate() {
-        return paymantDate;
+    public Long getPayment() {
+        return payment;
     }
 
-    public void setPaymantDate(Date paymantDate) {
-        this.paymantDate = paymantDate;
+    public void setPayment(Long payment) {
+        this.payment = payment;
     }
 
     public String getCardNumber() {
         return cardNumber;
+    }
+
+    public Integer getExpertId() {
+        return expertId;
+    }
+
+    public void setExpertId(Integer expertId) {
+        this.expertId = expertId;
     }
 
     public void setCardNumber(String cardNumber) {

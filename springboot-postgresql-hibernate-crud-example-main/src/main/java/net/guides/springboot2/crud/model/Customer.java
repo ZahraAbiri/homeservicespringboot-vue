@@ -3,6 +3,7 @@ package net.guides.springboot2.crud.model;
 import lombok.*;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import java.util.Date;
 
@@ -12,8 +13,13 @@ import java.util.Date;
 @Getter
 @Service
 public class Customer extends Person{
+    private boolean isEnabled;
 
-//    public Customer() {
-//        super();
-//    }
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
+    }
 }

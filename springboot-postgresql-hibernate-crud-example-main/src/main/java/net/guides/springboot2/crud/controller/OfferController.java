@@ -1,6 +1,7 @@
 package net.guides.springboot2.crud.controller;//package net.guides.springboot2.crud.controller;
 //
 
+import io.swagger.annotations.ApiOperation;
 import net.guides.springboot2.crud.dto.OfferDto;
 import net.guides.springboot2.crud.dto.OrderDto;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
@@ -34,12 +35,16 @@ public class OfferController {
     private CustomerDao customerDao;
 
     @GetMapping("/ofer")
+    @ApiOperation(value = "get offers",
+            response = Offer.class)
     public List<Offer> getAllOffers() {
         return offerDao.findAll();
     }
 
 
     @GetMapping("/off/{id}")
+    @ApiOperation(value = "get offers by id",
+            response = Offer.class)
     public ResponseEntity<Offer> getofferById(@PathVariable(value = "id") Integer offerId)
             throws ResourceNotFoundException {
         Offer offer = offerDao.findById(offerId)
@@ -48,6 +53,8 @@ public class OfferController {
     }
 
     @PostMapping("/offer")
+    @ApiOperation(value = "save offers ",
+            response = Offer.class)
     public Offer createOffer(@Valid @RequestBody Offer offer) {
 
         return offerDao.save(offer);
@@ -55,6 +62,8 @@ public class OfferController {
 
 
     @PostMapping("/offers")
+    @ApiOperation(value = "expert add his offer",
+            response = Offer.class)
     public Offer createOffer(@Valid @RequestBody OfferDto offerDto) {
         Optional<Expert> expert = expertDao.findByEmailAddress(offerDto.getExpertEmailAddress());
         Expert expert1 = new Expert();
@@ -77,6 +86,8 @@ public class OfferController {
 
 
     @PutMapping("/ofer/{id}")
+    @ApiOperation(value = "update offers by id",
+            response = Offer.class)
     public ResponseEntity<Offer> updateOffer(@PathVariable(value = "id") Integer offerId,
                                              @Valid @RequestBody Offer offerDeyails) throws ResourceNotFoundException {
         Offer offer = offerDao.findById(offerId)
@@ -90,6 +101,8 @@ public class OfferController {
     }
 
     @DeleteMapping("/of/{id}")
+    @ApiOperation(value = "delete offers by id",
+            response = Offer.class)
     public Map<String, Boolean> deleteOffers(@PathVariable(value = "id") Integer offerId)
             throws ResourceNotFoundException {
         Offer offer = offerDao.findById(offerId)

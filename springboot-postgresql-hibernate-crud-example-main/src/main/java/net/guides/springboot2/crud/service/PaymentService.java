@@ -5,5 +5,5 @@ import net.guides.springboot2.crud.model.Customer;
 
 
 public interface PaymentService {
-    Customer pay(PaymentDto paymentDto);
+//    Customer pay(PaymentDto paymentDto);
 }

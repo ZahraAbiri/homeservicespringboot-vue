@@ -1,5 +1,6 @@
 package net.guides.springboot2.crud.model;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +22,9 @@ public class Manager {
     @Column(unique = true)
     private String username;
     private String password;
-
+    @Column(unique = true)
+    @ApiModelProperty(notes = "email address is unic")
+    private String emailAddress;
     public Integer getId() {
         return id;
     }
@@ -56,6 +59,14 @@ public class Manager {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
     public void setPassword(String password) {

@@ -22,7 +22,7 @@ public class ExpertServiceImpl implements ExpertService {
     private ExpertDao expertDao;
 
     private ModelMapper modelMapper;
-    @Override
+//    @Override
     public void save(Expertdto expertDto) throws ResourceNotFoundException {
         Optional<Expert> foundedExpert = expertDao.findByEmailAddress(expertDto.getEmailAddress());
         if (foundedExpert.isPresent()) {
@@ -40,21 +40,21 @@ public class ExpertServiceImpl implements ExpertService {
         }
     }
 
-    @Override
+//    @Override
     public Expertdto findByEmailAddress(String emailAddress) throws ResourceNotFoundException {
         Optional<Expert> optionalExpert = expertDao.findByEmailAddress(emailAddress);
         Expert expert = optionalExpert.orElseThrow(() -> new ResourceNotFoundException("not fount expert"));
         return modelMapper.map(expert, Expertdto.class);
     }
 
-    @Override
+//    @Override
     public boolean update(Expertdto expertDto) {
         Expert expert = modelMapper.map(expertDto, Expert.class);
         expertDao.save(expert);
         return false;
     }
 
-    @Override
+//    @Override
     public List<SubService> findServicesByEmail(Expertdto expertDto) {
         Expert expert = modelMapper.map(expertDto, Expert.class);
         List<SubService> services = expert.getServices();
@@ -62,7 +62,7 @@ public class ExpertServiceImpl implements ExpertService {
                 .map(subService -> modelMapper.map(subService, SubService.class)).collect(Collectors.toList());
     }
 
-    @Override
+//    @Override
     public void updateScore(Expertdto expertDto, Double instructionsScore) {
         Double expertScore = expertDto.getScore();
         Double newScore = (expertScore + instructionsScore) / 2;
@@ -70,17 +70,17 @@ public class ExpertServiceImpl implements ExpertService {
         update(expertDto);
     }
 
-    @Override
+//    @Override
     public Expertdto findById(Integer id) throws ResourceNotFoundException {
         Optional<Expert> optionalExpert = expertDao.findById(id);
         Expert expert = optionalExpert.orElseThrow(() -> new ResourceNotFoundException("expert not exist!"));
         return modelMapper.map(expert, Expertdto.class);
     }
 
-    @Override
-    public Expertdto findByEmailAddressAndPassword(String email, String password) throws ResourceNotFoundException {
-        Optional<Expert> optionalExpert = expertDao.findByEmailAddressAndPassword(email, password);
-        Expert expert = optionalExpert.orElseThrow(() -> new ResourceNotFoundException("not found"));
-        return modelMapper.map(expert, Expertdto.class);
-    }
+//    @Override
+//    public Expertdto findByEmailAddressAndPassword(String email, String password) throws ResourceNotFoundException {
+//        Optional<Expert> optionalExpert = expertDao.findByEmailAddressAndPassword(email, password);
+//        Expert expert = optionalExpert.orElseThrow(() -> new ResourceNotFoundException("not found"));
+//        return modelMapper.map(expert, Expertdto.class);
+//    }
 }

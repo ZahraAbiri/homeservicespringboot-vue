@@ -1,12 +1,10 @@
 package net.guides.springboot2.crud.controller;//package net.guides.springboot2.crud.controller;
 //
 
+import io.swagger.annotations.ApiOperation;
 import net.guides.springboot2.crud.dto.OrderDto;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
-import net.guides.springboot2.crud.model.Address;
-import net.guides.springboot2.crud.model.Customer;
-import net.guides.springboot2.crud.model.Order;
-import net.guides.springboot2.crud.model.SubService;
+import net.guides.springboot2.crud.model.*;
 import net.guides.springboot2.crud.repository.CustomerDao;
 import net.guides.springboot2.crud.repository.OrderDao;
 import net.guides.springboot2.crud.repository.SubserviceDao;
@@ -33,12 +31,16 @@ public class OrderController {
 	private SubserviceDao subserviceDao;
 
 	@GetMapping("/ordersfind")
+	@ApiOperation(value = "get orders ",
+			response = Order.class)
 	public List<Order> getAllOrderss() {
 		return orderDao.findAll();
 	}
 
 
 	@GetMapping("/ord/{id}")
+	@ApiOperation(value = "get orders by id ",
+			response = Order.class)
 	public ResponseEntity<Order> getorderById(@PathVariable(value = "id") Integer orderId)
 			throws ResourceNotFoundException {
         Order order = orderDao.findById(orderId)
@@ -47,11 +49,14 @@ public class OrderController {
 	}
 
 	@PostMapping("/order")
+	@ApiOperation(value = "save order ",
+			response = Order.class)
 	public Order createorder(@Valid @RequestBody Order order) {
-
 		return orderDao.save(order);
 	}
 	@PostMapping("/orders")
+	@ApiOperation(value = "customer save order ",
+			response = Order.class)
 	public Order createorders(@Valid @RequestBody OrderDto orderDto) {
 		Optional<Customer> customer=customerDao.findByEmailAddress(orderDto.getCustomerEmailAddrress());
 		Customer customer1=new Customer();
@@ -73,6 +78,8 @@ public class OrderController {
 	}
 
 	@PutMapping("/order/{id}")
+	@ApiOperation(value = "update orders ",
+			response = Order.class)
 	public ResponseEntity<Order> updateOrdes(@PathVariable(value = "id") Integer orderId,
 											 @Valid @RequestBody Order orderDetails) throws ResourceNotFoundException {
         Order order = orderDao.findById(orderId)
@@ -83,6 +90,8 @@ public class OrderController {
 	}
 
 	@DeleteMapping("/ord/{id}")
+	@ApiOperation(value = "delete orders ",
+			response = Order.class)
 	public Map<String, Boolean> deleteorder(@PathVariable(value = "id") Integer orderId)
 			throws ResourceNotFoundException {
         Order order = orderDao.findById(orderId)

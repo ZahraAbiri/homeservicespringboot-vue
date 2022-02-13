@@ -1,101 +1,89 @@
 package net.guides.springboot2.crud.controller;//package net.guides.springboot2.crud.controller;
 //
+
+import io.swagger.annotations.ApiOperation;
+import net.guides.springboot2.crud.dto.Customerdto;
+import net.guides.springboot2.crud.dto.PaymentDto;
+import net.guides.springboot2.crud.exception.ResourceNotFoundException;
+import net.guides.springboot2.crud.model.Customer;
+import net.guides.springboot2.crud.model.Payment;
+import net.guides.springboot2.crud.service.CustomerService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-
-import net.guides.springboot2.crud.dto.Customerdto;
-import net.guides.springboot2.crud.dto.OrderDto;
-import net.guides.springboot2.crud.dto.PaymentDto;
-import net.guides.springboot2.crud.model.Customer;
-import net.guides.springboot2.crud.repository.CustomerDao;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import net.guides.springboot2.crud.exception.ResourceNotFoundException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/cus")
 public class CustomerController {
-	private final CustomerDao customerDao;
-
-	@Autowired
-	public CustomerController(CustomerDao customerDao) {
-		this.customerDao = customerDao;
-	}
-
-	@GetMapping("/custom")
-	public List<Customer> getAllCustomer() {
-		return customerDao.findAll();
-	}
-
-	@GetMapping("/customer/{id}")
-	public ResponseEntity<Customer> getCustomerById(@PathVariable(value = "id") Integer customerId)
-			throws ResourceNotFoundException {
-		Customer customer = customerDao.findById(customerId)
-				.orElseThrow(() -> new ResourceNotFoundException("Customer not found for this id :: " + customerId));
-		return ResponseEntity.ok().body(customer);
-	}
-
-	@PostMapping("/cu")
-	public Customer createCustomr(@RequestBody Customerdto customerdto)
-
-	{
-		Customer customer=new Customer();
-		customer.setFirstname(customerdto.getFirstname());
-		customer.setLastname(customerdto.getLastname());
-		customer.setPersonStatuse(customerdto.getPersonStatuse());
-		customer.setCredit(customerdto.getCredit());
-		customer.setEmailAddress(customerdto.getEmailAddress());
-		customer.setPassword(customerdto.getPassword());
-		customer.setRegistrationDate(customerdto.getRegistrationDate());
+    @Autowired
+    private CustomerService customerService;
 
 
-		return customerDao.save(customer);
-	}
+    @GetMapping("/custom")
+    @ApiOperation(value = "get all customers",
+            notes = "return list of customers",
+            response = Customer.class)
+    public List<Customer> getAllCustomer() {
+        return customerService.get();
+    }
 
-	@PostMapping("/c")
-	public String createCustomr(@RequestBody String customer)
-	{
-		return customer;
-	}
+    @GetMapping("/customer/{id}")
+    @ApiOperation(value = "get customer by id",
+            notes = "return list of customers",
+            response = Customer.class)
+    public ResponseEntity<Customer> getCustomerById(@PathVariable(value = "id") Integer customerId)
+            throws ResourceNotFoundException {
+        Customer customer = customerService.getById(customerId);
+        return ResponseEntity.ok().body(customer);
+    }
 
-	@PutMapping("/custom/{id}")
-	public ResponseEntity<Customer> updateCustomer(@PathVariable(value = "id") Integer customerId,
-												   @RequestBody Customer custommerDetails) throws ResourceNotFoundException {
-		Customer customer = customerDao.findById(customerId)
-				.orElseThrow(() -> new ResourceNotFoundException("Customer not found for this id :: " + customerId));
+//    @PostMapping("/cu")
+//    @ApiOperation(value = "save customer use dto",
+//            response = Customer.class)
+//    public Customer createCustomr(@RequestBody Customerdto customerdto) throws ResourceNotFoundException {
+//        return customerService.save(customerdto);
+//    }
 
-		customer.setEmailAddress(custommerDetails.getEmailAddress());
-		customer.setFirstname(custommerDetails.getFirstname());
-		customer.setLastname(custommerDetails.getLastname());
-		customer.setPassword(custommerDetails.getPassword());
-		customer.setCredit(custommerDetails.getCredit());
-		customer.setPersonStatuse(custommerDetails.getPersonStatuse());
 
-		final Customer updatedCustomer = customerDao.save(customer);
-		return ResponseEntity.ok(updatedCustomer);
-	}
+    @PutMapping("/custom/{id}")
+    @ApiOperation(value = "update  customer by id",
+            response = Customer.class)
+    public ResponseEntity<Customer> updateCustomer(@PathVariable(value = "id") Integer customerId,
+                                                   @RequestBody Customer custommerDetails) throws ResourceNotFoundException {
+        Customer updatedCustomer = customerService.updateById(customerId, custommerDetails);
+        return ResponseEntity.ok(updatedCustomer);
+    }
 
-	@DeleteMapping("/custom/{id}")
-	public Map<String, Boolean> deleteCustomer(@PathVariable(value = "id") Integer customerId)
-			throws ResourceNotFoundException {
-		Customer customer = customerDao.findById(customerId)
-				.orElseThrow(() -> new ResourceNotFoundException("Customer not found for this id :: " + customerId));
+    @DeleteMapping("/custom/{id}")
+    @ApiOperation(value = "delete customer by id",
+            response = Customer.class)
+    public Map<String, Boolean> deleteCustomer(@PathVariable(value = "id") Integer customerId)
+            throws ResourceNotFoundException {
+        Customer customer = customerService.deleteById(customerId);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return response;
+    }
 
-		customerDao.delete(customer);
-		Map<String, Boolean> response = new HashMap<>();
-		response.put("deleted", Boolean.TRUE);
-		return response;
-	}
+    @PostMapping("/payByCard")
+    @ApiOperation(value = "customer pay order use credit card",
+            response = PaymentDto.class)
+    public Payment paymentByCard(PaymentDto paymentDto) throws ResourceNotFoundException {
+        return customerService.paymentByCard(paymentDto);
 
+    }
+
+    @PostMapping("/payByCredit")
+    @ApiOperation(value = "customer pay order by own credit credit ",
+            response = PaymentDto.class)
+    public Payment payByCredit(PaymentDto paymentDto) throws ResourceNotFoundException {
+        return customerService.paymentByCredit(paymentDto);
+
+
+    }
 }

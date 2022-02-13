@@ -23,8 +23,8 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public Manager findByEmailAddressAndPassword(String email, String password) {
-        Optional<Manager> optionalManager = managerDao.findByEmailAddressAndPassword(email, password);
-        Manager manager = optionalManager.orElseThrow(() -> new ResourceNotFoundException("manager not found"));
-        return manager;
+//        Optional<Manager> optionalManager = managerDao.findByEmailAddressAndPassword(email, password);
+//        Manager manager = optionalManager.orElseThrow(() -> new ResourceNotFoundException("manager not found"));
+        return null;
     }
 }

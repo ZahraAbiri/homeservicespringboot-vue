@@ -1,25 +1,17 @@
 package net.guides.springboot2.crud.controller;//package net.guides.springboot2.crud.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-
+import io.swagger.annotations.ApiOperation;
 import net.guides.springboot2.crud.dto.CommentDto;
+import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Comment;
-import net.guides.springboot2.crud.model.Customer;
-import net.guides.springboot2.crud.model.Expert;
-import net.guides.springboot2.crud.model.Order;
-import net.guides.springboot2.crud.repository.CommentDao;
-import net.guides.springboot2.crud.repository.CustomerDao;
-import net.guides.springboot2.crud.repository.ExpertDao;
-import net.guides.springboot2.crud.repository.OrderDao;
+import net.guides.springboot2.crud.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import net.guides.springboot2.crud.exception.ResourceNotFoundException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:8081")
 
@@ -27,69 +19,49 @@ import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 @RequestMapping("/com")
 public class CommentController {
 	@Autowired
-	private CommentDao commentDao;
-	@Autowired
-	private OrderDao orderDao;
-	@Autowired
-	private ExpertDao expertDao;
-	@Autowired
-	private CustomerDao customerDao;
+	CommentService commentService;
+
+
+
 	@GetMapping("/comment")
+	@ApiOperation(value = "get comments",
+			response = Comment.class)
 	public List<Comment> getAllComments() {
-		return commentDao.findAll();
+		return commentService.get();
 	}
 
 
 	@GetMapping("/comment/{id}")
+	@ApiOperation(value = "get comments by id",
+			response = Comment.class)
 	public ResponseEntity<Comment> getCommentById(@PathVariable(value = "id") Integer commentId)
 			throws ResourceNotFoundException {
-		Comment comment = commentDao.findById(commentId)
-				.orElseThrow(() -> new ResourceNotFoundException("Comment not found for this id :: " + commentId));
+		Comment comment = commentService.getById(commentId);
 		return ResponseEntity.ok().body(comment);
 	}
 
 	@PostMapping("/comm")
+	@ApiOperation(value = "save comments ",
+			response = Comment.class)
 	public Comment createComment(@RequestBody CommentDto commentDto) {
-		Order order=new Order();
-		Customer customer=new Customer();
-		Expert expert=new Expert();
-		Optional<Order> ord = orderDao.findById(commentDto.getOrderid());
-		if (ord.isPresent()) {
-			order = ord.get();
-		}Optional<Expert> exp = expertDao.findById(commentDto.getExpertid());
-		if (exp.isPresent()) {
-			expert = exp.get();
-		}Optional<Customer> cus = customerDao.findById(commentDto.getExpertid());
-		if (cus.isPresent()) {
-			customer = cus.get();
-		}
-		Comment comment=new Comment();
-		comment.setCustomer(customer);
-		comment.setExpert(expert);
-		comment.setOrder(order);
-		comment.setDesciption(commentDto.getDesciption());
-		comment.setScore(commentDto.getScore());
-		return commentDao.save(comment);
+		return commentService.save(commentDto);
 	}
 
 	@PutMapping("/commentss/{id}")
+	@ApiOperation(value = "update comments by id",
+			response = Comment.class)
 	public ResponseEntity<Comment> updateComment(@PathVariable(value = "id") Integer commentId,
 			@RequestBody Comment commentDetails) throws ResourceNotFoundException {
-		Comment comment = commentDao.findById(commentId)
-				.orElseThrow(() -> new ResourceNotFoundException("comment not found for this id :: " + commentId));
-
-		comment.setDesciption(commentDetails.getDesciption());
-		final Comment updatedcomment1 = commentDao.save(comment);
-		return ResponseEntity.ok(updatedcomment1);
+		Comment comment = commentService.updateById(commentId, commentDetails);
+		return ResponseEntity.ok(comment);
 	}
 
 	@DeleteMapping("/comment/{id}")
+	@ApiOperation(value = "delete comments by id",
+			response = Comment.class)
 	public Map<String, Boolean> deleteComment(@PathVariable(value = "id") Integer commentId)
 			throws ResourceNotFoundException {
-		Comment comment = commentDao.findById(commentId)
-				.orElseThrow(() -> new ResourceNotFoundException("comment not found for this id :: " + commentId));
-
-		commentDao.delete(comment);
+		Comment comment = commentService.deleteById(commentId);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;

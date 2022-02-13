@@ -21,6 +21,8 @@ public class Payment {
 
     @OneToOne
     private Order order;
+    @OneToOne
+    private Customer customer;
 
     @CreationTimestamp
     private Date paymantDate;
@@ -49,6 +51,14 @@ public class Payment {
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public Date getPaymantDate() {

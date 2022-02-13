@@ -1,8 +1,9 @@
 package net.guides.springboot2.crud.controller;//package net.guides.springboot2.crud.controller;
 
+import io.swagger.annotations.ApiOperation;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Address;
-import net.guides.springboot2.crud.repository.AddressDao;
+import net.guides.springboot2.crud.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,60 +11,52 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-@CrossOrigin(origins = "http://localhost:8081")
+
+@CrossOrigin(origins = "*")
 
 @RestController
 @RequestMapping("/add")
 public class AddressController {
-	@Autowired
-	private AddressDao addressDao;
+    @Autowired
+    private AddressService addressService;
 
-	@GetMapping("/ad")
-	public List<Address> getAllEmployees() {
-		return addressDao.findAll();
-	}
+    @GetMapping("/ad")
+    @ApiOperation(value = "get address ",
+            response = Address.class)
+    public List<Address> getAllAddress() {
+        return addressService.get();
+    }
 
-	@PostMapping("/test")
-	public String test() {
-		return "test";
-	}
+    @GetMapping("/address/{id}")
+    public ResponseEntity<Address> getAddressById(@PathVariable(value = "id") Integer addressId) throws ResourceNotFoundException {
+        Address address = addressService.getById(addressId);
+        return ResponseEntity.ok().body(address);
+    }
 
-	@GetMapping("/address/{id}")
-	public ResponseEntity<Address> getAddressById(@PathVariable(value = "id") Integer addressId)
-			throws ResourceNotFoundException {
-		Address address = addressDao.findById(addressId)
-				.orElseThrow(() -> new ResourceNotFoundException("address not found for this id :: " + addressId));
-		return ResponseEntity.ok().body(address);
-	}
+    @PostMapping("/address")
+    @ApiOperation(value = "save address ",
+            response = Address.class)
+    public Address createAddress(@RequestBody Address address) {
+        return addressService.save(address);
+    }
 
-	@PostMapping("/address")
-	public Address createAddress( @RequestBody Address address) {
-		return addressDao.save(address);
-	}
+    @PutMapping("/add/{id}")
+    @ApiOperation(value = "update address ",
+            response = Address.class)
+    public ResponseEntity<Address> updateAddress(@PathVariable(value = "id") Integer addressId,
+                                                 @RequestBody Address addressDetails) throws ResourceNotFoundException {
+        Address address = addressService.updateById(addressId, addressDetails);
+        return ResponseEntity.ok(address);
+    }
 
-	@PutMapping("/add/{id}")
-	public ResponseEntity<Address> updateAddress(@PathVariable(value = "id") Integer addressId,
-			 @RequestBody Address addressDetails) throws ResourceNotFoundException {
-		Address address = addressDao.findById(addressId)
-				.orElseThrow(() -> new ResourceNotFoundException("Address not found for this id :: " + addressId));
-
-		address.setCity(addressDetails.getCity());
-		address.setHouseNumber(addressDetails.getHouseNumber());
-		address.setStreetAddress(addressDetails.getStreetAddress());
-		address.setZipCode(addressDetails.getZipCode());
-		final Address updatedAddress = addressDao.save(address);
-		return ResponseEntity.ok(updatedAddress);
-	}
-
-	@DeleteMapping("/addres/{id}")
-	public Map<String, Boolean> deleteEmployee(@PathVariable(value = "id") Integer addressId)
-			throws ResourceNotFoundException {
-		Address address = addressDao.findById(addressId)
-				.orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + addressId));
-
-		addressDao.delete(address);
-		Map<String, Boolean> response = new HashMap<>();
-		response.put("deleted", Boolean.TRUE);
-		return response;
-	}
+    @DeleteMapping("/addres/{id}")
+    @ApiOperation(value = "delete address ",
+            response = Address.class)
+    public Map<String, Boolean> deleteEmployee(@PathVariable(value = "id") Integer addressId)
+            throws ResourceNotFoundException {
+        Address address = addressService.deleteById(addressId);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return response;
+    }
 }

@@ -2,6 +2,7 @@ package net.guides.springboot2.crud.service;
 
 import lombok.RequiredArgsConstructor;
 import net.guides.springboot2.crud.dto.CommentDto;
+import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Comment;
 import net.guides.springboot2.crud.model.Customer;
 import net.guides.springboot2.crud.model.Expert;
@@ -13,6 +14,7 @@ import net.guides.springboot2.crud.repository.OrderDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -29,7 +31,39 @@ public class CommentServiceImpl implements CommentService {
     private CustomerDao customerDao;
 
     @Override
-    public void save(CommentDto commentDto) {
+    public Comment getById(Integer commentId) throws ResourceNotFoundException {
+        Comment comment = commentDao.findById(commentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Comment not found for this id :: " + commentId));
+        return comment;
+    }
+
+    @Override
+    public Comment deleteById(Integer commentId) throws ResourceNotFoundException {
+        Comment comment = commentDao.findById(commentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + commentId));
+        commentDao.delete(comment);
+        return comment;
+    }
+
+    @Override
+    public Comment updateById(Integer commentId, Comment commentDetailsommentDetails) throws ResourceNotFoundException {
+        Comment comment = commentDao.findById(commentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Comment not found for this id :: " + commentId));
+        comment.setDesciption(commentDetailsommentDetails.getDesciption());
+        comment.setOrder(commentDetailsommentDetails.getOrder());
+        comment.setCustomer(commentDetailsommentDetails.getCustomer());
+        comment.setScore(commentDetailsommentDetails.getScore());
+        comment.setExpert(commentDetailsommentDetails.getExpert());
+        return commentDao.save(comment);
+    }
+
+    @Override
+    public List<Comment> get() {
+        return commentDao.findAll();
+    }
+
+    @Override
+    public Comment save(CommentDto commentDto) {
         Order order = new Order();
         Customer customer = new Customer();
         Expert expert = new Expert();
@@ -53,6 +87,6 @@ public class CommentServiceImpl implements CommentService {
         comment.setScore(commentDto.getScore());
         comment.setScore(commentDto.getScore());
         comment.setDesciption(commentDto.getDesciption());
-        commentDao.save(comment);
+      return   commentDao.save(comment);
     }
 }

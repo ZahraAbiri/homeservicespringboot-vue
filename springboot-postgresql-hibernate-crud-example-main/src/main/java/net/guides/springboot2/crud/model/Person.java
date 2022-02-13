@@ -1,5 +1,6 @@
 package net.guides.springboot2.crud.model;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import net.guides.springboot2.crud.model.enums.PersonStatuse;
 import net.guides.springboot2.crud.model.enums.Role;
@@ -20,13 +21,14 @@ public class Person {
     private String firstname;
     private String lastname;
     @Column(unique = true)
+    @ApiModelProperty(notes = "email address is unic")
     private String emailAddress;
     private String password;
     @Enumerated(EnumType.STRING)
     private PersonStatuse personStatuse;
     @CreationTimestamp
     private Date registrationDate;
-    private Long credit;
+    private String credit;
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -94,11 +96,11 @@ public class Person {
         this.registrationDate = registrationDate;
     }
 
-    public Long getCredit() {
+    public String getCredit() {
         return credit;
     }
 
-    public void setCredit(Long credit) {
+    public void setCredit(String credit) {
         this.credit = credit;
     }
 }

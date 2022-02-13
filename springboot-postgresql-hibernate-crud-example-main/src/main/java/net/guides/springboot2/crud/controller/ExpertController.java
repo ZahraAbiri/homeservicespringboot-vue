@@ -1,8 +1,10 @@
 package net.guides.springboot2.crud.controller;//package net.guides.springboot2.crud.controller;
 //
 
+import io.swagger.annotations.ApiOperation;
 import net.guides.springboot2.crud.dto.Expertdto;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
+import net.guides.springboot2.crud.model.Comment;
 import net.guides.springboot2.crud.model.Expert;
 import net.guides.springboot2.crud.repository.ExpertDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +28,15 @@ public class ExpertController {
     private ExpertDao expertDao;
 
     @GetMapping("/expert")
+    @ApiOperation(value = "get Expert",
+            response = Expert.class)
     public List<Expert> getAllExperts() {
         return expertDao.findAll();
     }
 
     @GetMapping("/expert/{id}")
+    @ApiOperation(value = "get Expert by id",
+            response = Expert.class)
     public ResponseEntity<Expert> getExpertById(@PathVariable(value = "id") Integer expertId)
             throws ResourceNotFoundException {
         Expert expert = expertDao.findById(expertId)
@@ -39,6 +45,8 @@ public class ExpertController {
     }
 
     @PostMapping("/experts")
+    @ApiOperation(value = "save expert",
+            response = Expert.class)
     public Expert createExpert(@Valid @RequestBody Expertdto expertdto) {
         Expert expert = new Expert();
         expert.setFirstname(expertdto.getFirstname());
@@ -51,6 +59,8 @@ public class ExpertController {
     }
 
     @PutMapping("/experts/{id}")
+    @ApiOperation(value = "update  Expert use id",
+            response = Expert.class)
     public ResponseEntity<Expert> updateExpert(@PathVariable(value = "id") Integer expertId,
                                                @Valid @RequestBody Expert expertDetails) throws ResourceNotFoundException {
         Expert expert = expertDao.findById(expertId)
@@ -68,6 +78,8 @@ public class ExpertController {
 
 
     @PutMapping("/expaddsub/{id}")
+    @ApiOperation(value = "Expert can save subservice",
+            response = Expert.class)
     public ResponseEntity<Expert> updateExpertSubservice(@PathVariable(value = "id") Integer expertId,
                                                          @Valid @RequestBody Expert expert) throws ResourceNotFoundException {
         Expert experts = expertDao.findById(expertId)
@@ -80,6 +92,8 @@ public class ExpertController {
 
 
     @DeleteMapping("/exper/{id}")
+    @ApiOperation(value = "delete Expert",
+            response = Expert.class)
     public Map<String, Boolean> deleteExpert(@PathVariable(value = "id") Integer expertId)
             throws ResourceNotFoundException {
         Expert expert = expertDao.findById(expertId)
